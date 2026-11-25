@@ -12,3 +12,6 @@
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Generated HTML site (built by GitHub Actions)
+site/

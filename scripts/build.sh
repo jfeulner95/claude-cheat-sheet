@@ -32,3 +32,12 @@ pandoc "${common[@]}" \
   --pdf-engine=weasyprint \
   --output "$OUTPUT"
 echo "built $OUTPUT"
+
+# HTML (single self-contained file for GitHub Pages)
+{ echo "<script>"; cat "$ASSETS/copy.js"; echo "</script>"; } > "$tmp/copy.html"
+mkdir -p site
+pandoc "${common[@]}" \
+  --css "$ASSETS/web.css" \
+  --include-after-body "$tmp/copy.html" \
+  --output site/index.html
+echo "built site/index.html"

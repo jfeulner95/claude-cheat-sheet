@@ -39,6 +39,15 @@ assert_contains "$pdf_txt" "Version $VERSION"
 assert_contains "$pdf_txt" "https://code.claude.com/docs/en/quickstart"
 assert_max_width "$pdf_txt" 150
 
+# --- HTML ---
+html="site/index.html"
+assert_file "$html"
+assert_contains "$html" "navigator.clipboard"
+assert_contains "$html" "Version $VERSION"
+assert_contains "$html" "$PAGES_URL"
+assert_contains "$html" "prefers-color-scheme: dark"
+assert_not_matches "$html" '<(script|link)[^>]+(src|href)="https?://'
+
 echo
 if (( failures > 0 )); then
   echo "$failures check(s) failed"
