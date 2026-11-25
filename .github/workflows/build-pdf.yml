@@ -11,8 +11,9 @@ permissions:
   contents: read
 
 env:
-  SOURCE: "Claude Code Cheatsheet.md"
-  OUTPUT: "Claude-Code-Cheatsheet.pdf"
+  SOURCE: "README.md"
+  # Tag builds (e.g. v1.2) -> Claude-Code-Cheatsheet_v1.2.pdf, otherwise Claude-Code-Cheatsheet.pdf
+  OUTPUT: ${{ startsWith(github.ref, 'refs/tags/v') && format('Claude-Code-Cheatsheet_{0}.pdf', github.ref_name) || 'Claude-Code-Cheatsheet.pdf' }}
 
 jobs:
   build:
