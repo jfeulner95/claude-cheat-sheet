@@ -23,14 +23,13 @@ body {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 4pt 12pt;
   font-size: 8pt;
   color: var(--muted);
   border-bottom: 2pt solid; border-bottom-color: var(--accent);
   padding-bottom: 4pt;
   margin-bottom: 10pt;
 }
-.banner .version { font-weight: bold; color: var(--accent); }
+.banner .version { font-weight: bold; color: var(--accent); margin-right: 12pt; }
 
 h1 { font-size: 22pt; margin: 0 0 2pt; letter-spacing: -0.3pt; }
 h2 {
@@ -45,8 +44,6 @@ h3 { font-size: 11pt; }
 a {
   color: var(--accent);
   text-decoration: underline;
-  text-decoration-thickness: 0.5pt;
-  text-underline-offset: 1.5pt;
 }
 
 code {
