@@ -26,7 +26,7 @@ body {
   gap: 4pt 12pt;
   font-size: 8pt;
   color: var(--muted);
-  border-bottom: 2pt solid var(--accent);
+  border-bottom: 2pt solid; border-bottom-color: var(--accent);
   padding-bottom: 4pt;
   margin-bottom: 10pt;
 }
@@ -38,7 +38,7 @@ h2 {
   color: var(--accent);
   margin: 18pt 0 6pt;
   padding-bottom: 3pt;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid; border-bottom-color: var(--line);
 }
 h3 { font-size: 11pt; }
 
@@ -52,15 +52,15 @@ a {
 code {
   font-family: "DejaVu Sans Mono", ui-monospace, Menlo, monospace;
   font-size: 8.5pt;
-  background: var(--surface);
+  background-color: var(--surface);
   padding: 0 2pt;
   border-radius: 2pt;
 }
 code, pre { hyphens: none; }
 
 pre {
-  background: var(--surface);
-  border-left: 3pt solid var(--accent);
+  background-color: var(--surface);
+  border-left: 3pt solid; border-left-color: var(--accent);
   padding: 6pt 8pt;
   border-radius: 0 3pt 3pt 0;
   white-space: pre-wrap;
@@ -77,11 +77,11 @@ th, td {
   text-align: left;
   vertical-align: top;
   padding: 3pt 5pt;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid; border-bottom-color: var(--line);
   overflow-wrap: anywhere;
 }
-th { background: var(--surface); }
-tbody tr:nth-child(even) { background: var(--zebra); }
+th { background-color: var(--surface); }
+tbody tr:nth-child(even) { background-color: var(--zebra); }
 
 ul, ol { padding-left: 16pt; }
 li { margin: 1pt 0; }

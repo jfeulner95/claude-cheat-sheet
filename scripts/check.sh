@@ -30,6 +30,12 @@ assert_max_width() { # file, max characters per line
   if (( widest <= $2 )); then pass "$1 widest line $widest <= $2"; else fail "$1 widest line $widest > $2"; fi
 }
 
+# --- Stylesheets ---
+# WeasyPrint < 63 (Ubuntu 24.04 ships 61) drops var() inside shorthand properties
+for css in .github/pdf/base.css .github/pdf/print.css; do
+  assert_not_matches "$css" '(border(-[a-z]+)?|background):[^;]*var\('
+done
+
 # --- PDF ---
 assert_file "$OUTPUT"
 pdf_txt="$(mktemp)"
@@ -46,6 +52,7 @@ assert_contains "$html" "navigator.clipboard"
 assert_contains "$html" "Version $VERSION"
 assert_contains "$html" "$PAGES_URL"
 assert_contains "$html" "prefers-color-scheme: dark"
+assert_contains "$html" "pre code span[class] { color: inherit"   # readable highlighting in dark mode
 assert_not_matches "$html" '<(script|link)[^>]+(src|href)="https?://'
 
 echo

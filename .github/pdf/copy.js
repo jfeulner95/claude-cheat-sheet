@@ -16,11 +16,32 @@
     el._copyTimer = setTimeout(function () { el.removeAttribute("data-copied"); }, 1200);
   }
 
-  // Copies text; if the Clipboard API is missing or refuses, selects `selectEl` instead.
+  // Legacy copy through a temporary textarea; works without the Clipboard API (e.g. on http).
+  function execCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  // Copies `text`. If the Clipboard API is missing or refuses, tries the legacy copy;
+  // if that fails too, selects `selectEl` when it shows exactly `text`, else offers `text` in a prompt.
   function copy(text, feedbackEl, selectEl) {
     var fallback = function () {
-      selectText(selectEl);
-      flash(feedbackEl, "Markiert – Strg/⌘+C");
+      if (execCopy(text)) { flash(feedbackEl, "Kopiert"); return; }
+      if (selectEl.textContent.trim() === text.trim()) {
+        selectText(selectEl);
+        flash(feedbackEl, "Markiert – Strg/⌘+C");
+      } else {
+        window.prompt("Zum Kopieren Strg/⌘+C drücken:", text);
+      }
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () { flash(feedbackEl, "Kopiert"); }, fallback);

@@ -94,3 +94,8 @@ a:hover + .copy-link, a:focus-visible + .copy-link, .copy-link:hover, .copy-link
   .copy-btn, .copy-link { display: none; }
   body { max-width: none; padding: 0; background: #fff; }
 }
+
+/* pandoc's syntax colours are tuned for light backgrounds */
+@media (prefers-color-scheme: dark) {
+  pre code span[class] { color: inherit; font-weight: inherit; font-style: inherit; }
+}

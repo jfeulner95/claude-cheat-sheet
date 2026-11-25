@@ -18,7 +18,7 @@
 
 /* Left accent bar on section headings */
 h2 {
-  border-left: 3pt solid var(--accent);
+  border-left: 3pt solid; border-left-color: var(--accent);
   padding-left: 6pt;
 }
 h2, h3 { break-after: avoid; }
