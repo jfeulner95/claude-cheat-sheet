@@ -1,0 +1,102 @@
+/* HTML page only. */
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  font-size: 15px;
+  background: #fff;
+}
+code { font-size: 0.88em; }
+a { text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+/* Code blocks + copy button */
+pre { position: relative; padding-right: 76px; }
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font: inherit;
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+.copy-btn:hover, .copy-btn:focus-visible { border-color: var(--accent); color: var(--accent); }
+
+/* Inline code: click to copy */
+code[role="button"] { cursor: copy; position: relative; }
+code[role="button"]:hover, code[role="button"]:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Link copy icon: shown on hover/focus */
+.copy-link {
+  font: inherit;
+  font-size: 0.85em;
+  margin-left: 2px;
+  padding: 0 3px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  position: relative;
+}
+a:hover + .copy-link, a:focus-visible + .copy-link, .copy-link:hover, .copy-link:focus-visible { opacity: 1; }
+@media (hover: none) { .copy-link { opacity: 1; } }
+
+/* "Kopiert" feedback bubble */
+[data-copied] { position: relative; }
+[data-copied]::after {
+  content: attr(data-copied);
+  position: absolute;
+  bottom: calc(100% + 4px);
+  right: 0;
+  white-space: nowrap;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--text);
+  color: #fff;
+  pointer-events: none;
+  z-index: 10;
+}
+.copy-link[data-copied] { opacity: 1; }
+
+/* Narrow screens: tables scroll horizontally instead of overflowing */
+@media (max-width: 700px) {
+  body { padding: 16px 12px 40px; font-size: 14px; }
+  table { display: block; overflow-x: auto; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent: #e08a5f;
+    --text: #e8e4df;
+    --muted: #a59d95;
+    --surface: #2a2724;
+    --zebra: #221f1d;
+    --line: #3a3632;
+  }
+  body { background: #1a1816; }
+  .copy-btn { background: #1a1816; }
+  [data-copied]::after { background: var(--text); color: #1a1816; }
+}
+
+@media print {
+  :root { --accent: #b4532a; --text: #1a1a1a; --muted: #6b6560; --surface: #f6f4f1; --zebra: #faf9f7; --line: #e4e1dc; }
+  .copy-btn, .copy-link { display: none; }
+  body { max-width: none; padding: 0; background: #fff; }
+}
+
+/* pandoc's syntax colours are tuned for light backgrounds */
+@media (prefers-color-scheme: dark) {
+  pre code span[class] { color: inherit; font-weight: inherit; font-style: inherit; }
+}

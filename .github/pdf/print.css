@@ -1,0 +1,35 @@
+/* PDF only (WeasyPrint). */
+@page {
+  size: A4;
+  margin: 18mm 16mm 20mm;
+  @bottom-left {
+    content: "Claude Code Cheatsheet · " string(version);
+    font-size: 7.5pt;
+    color: #888;
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-size: 7.5pt;
+    color: #888;
+  }
+}
+
+.banner .version { string-set: version content(); }
+
+/* Left accent bar on section headings */
+h2 {
+  border-left: 3pt solid; border-left-color: var(--accent);
+  padding-left: 6pt;
+}
+h2, h3 { break-after: avoid; }
+
+thead { display: table-header-group; }
+tr, pre { break-inside: avoid; }
+
+/* On paper a link is useless without its URL: print it in the sources section */
+#quellen-und-weiterlesen a::after {
+  content: " – " attr(href);
+  color: var(--muted);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}

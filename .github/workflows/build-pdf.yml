@@ -11,38 +11,38 @@ permissions:
   contents: read
 
 env:
-  SOURCE: "README.md"
   # Tag builds (e.g. v1.2) -> Claude-Code-Cheatsheet_v1.2.pdf, otherwise Claude-Code-Cheatsheet.pdf
   OUTPUT: ${{ startsWith(github.ref, 'refs/tags/v') && format('Claude-Code-Cheatsheet_{0}.pdf', github.ref_name) || 'Claude-Code-Cheatsheet.pdf' }}
+  VERSION: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'dev' }}
 
 jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Install pandoc and WeasyPrint
+      - name: Install pandoc, WeasyPrint and poppler
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends pandoc weasyprint fonts-dejavu
+          sudo apt-get install -y --no-install-recommends pandoc weasyprint fonts-dejavu poppler-utils
 
-      - name: Convert Markdown to PDF
-        run: |
-          pandoc "$SOURCE" \
-            --from gfm \
-            --standalone \
-            --embed-resources \
-            --metadata title="Claude Code Cheatsheet" \
-            --css .github/pdf/style.css \
-            --pdf-engine=weasyprint \
-            --output "$OUTPUT"
+      - name: Build PDF and HTML
+        run: scripts/build.sh
+
+      - name: Check outputs
+        run: scripts/check.sh
 
       - name: Upload PDF as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: claude-code-cheatsheet-pdf
           path: ${{ env.OUTPUT }}
           if-no-files-found: error
+
+      - name: Upload HTML site as Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -52,13 +52,29 @@ jobs:
       contents: write
     steps:
       - name: Download PDF artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: claude-code-cheatsheet-pdf
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: Claude Code Cheatsheet ${{ github.ref_name }}
           files: ${{ env.OUTPUT }}
           generate_release_notes: true
+
+  pages:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v5
