@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install pandoc, WeasyPrint and poppler
         run: |
@@ -33,14 +33,14 @@ jobs:
         run: scripts/check.sh
 
       - name: Upload PDF as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: claude-code-cheatsheet-pdf
           path: ${{ env.OUTPUT }}
           if-no-files-found: error
 
       - name: Upload HTML site as Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -52,12 +52,12 @@ jobs:
       contents: write
     steps:
       - name: Download PDF artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: claude-code-cheatsheet-pdf
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: Claude Code Cheatsheet ${{ github.ref_name }}
           files: ${{ env.OUTPUT }}
@@ -68,6 +68,7 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     permissions:
+      actions: read
       pages: write
       id-token: write
     environment:
@@ -76,4 +77,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
